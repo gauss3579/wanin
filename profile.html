@@ -1,0 +1,75 @@
+<html>
+
+<body>
+    <div>
+        你的電子信箱 :<input id="mail" type="email">
+    </div>
+    <div>
+        輸入密碼 : <input id="password" type="password">
+    </div>
+    <button id="changePassword">更改密碼</button>
+    <button id="deleteUser">刪除用戶</button>
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-auth.js"></script>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "",
+            authDomain: "",
+            projectId: "",
+            storageBucket: "",
+            messagingSenderId: "",
+            appId: ""
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        var email = localStorage.getItem('email');
+        var password = localStorage.getItem('password');
+
+        firebase.auth().signInWithEmailAndPassword(email, password).then((data) => {
+            document.getElementById('mail').value = email;
+            document.getElementById('password').value = password;
+        }).catch(function (error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(error.message)
+            console.error('error=', error);
+        });
+
+        var btnChangePassword = document.getElementById('changePassword');
+        btnChangePassword.onclick = function () {
+
+            var newPassword = document.getElementById('password').value;
+
+            var user = firebase.auth().currentUser;
+            console.log(user)
+            user.updatePassword(newPassword).then(function () {
+                alert("更新成功");
+                window.location.href = 'index.html';
+            }).catch(function (error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                alert(error.message)
+                console.error('error=', error);
+            });
+        }
+
+        var btnDeleteUser = document.getElementById('deleteUser');
+        btnDeleteUser.onclick = function () {
+            var user = firebase.auth().currentUser;
+            console.log(user)
+            user.delete().then(function () {
+                alert("刪除成功");
+                window.location.href = 'index.html';
+            }).catch(function (error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                alert(error.message)
+                console.error('error=', error);
+            });
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+<html>
+
+<body>
+    <div>
+        輸入帳號 : <input id="mail" type="email" value="123@gmail.com">
+    </div>
+    <div>
+        輸入密碼 : <input id="password" type="password" value="123456">
+    </div>
+    <button id="btnSingUp">註冊</button>
+    <button id="btnLogin">登入</button>
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-auth.js"></script>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "",
+            authDomain: "",
+            projectId: "",
+            storageBucket: "",
+            messagingSenderId: "",
+            appId: ""
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        var btnSingUp = document.getElementById('btnSingUp');
+        btnSingUp.onclick = function () {
+            var email = document.getElementById('mail').value;
+            var password = document.getElementById('password').value;
+            firebase.auth().createUserWithEmailAndPassword(email, password).then((data) => {
+                alert(data.user.email + '註冊成功')
+                console.log(data.user.email);
+            }).catch(function (error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                alert(error.message)
+                console.error('error=', error);
+            });
+        }
+    
+        var btnLogin = document.getElementById('btnLogin');
+        btnLogin.onclick = function () {
+            var email = document.getElementById('mail').value;
+            var password = document.getElementById('password').value;
+            firebase.auth().signInWithEmailAndPassword(email, password).then((data) => {
+                alert(data.user.email + '登入成功')
+                console.log(data.user.email);
+                localStorage.setItem('email', email);
+                localStorage.setItem('password', password);
+                window.location.href='profile.html';
+            }).catch(function (error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                alert(error.message)
+                console.error('error=', error);
+            });
+        }
+    
+    </script>
+
+</body>
+
+</html>
